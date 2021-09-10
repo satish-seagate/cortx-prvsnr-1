@@ -54,8 +54,8 @@ class ConfigCmd(Cmd):
     """ Add Command args for parsing """
 
     parser.add_argument('action', help='apply')
-    parser.add_argument('args', nargs='+', \
-        help='IN:<solution URL> IN:<config URL> OUT:<cortx URL>')
+    parser.add_argument('-o', dest='cortx_conf', nargs='?', help='CORTX Config Store')
+    parser.add_argument('args', nargs='+', help='IN:<solution URL> OUT:<cortx URL>')
 
   def process(self):
     """ Apply Config """
@@ -64,10 +64,8 @@ class ConfigCmd(Cmd):
       if num_args < 0:
         raise CortxSetupError(errno.EINVAL, "Insufficient parameters for apply")
       solution_conf_url = self._args.args[0]
-      cluster_conf_url = self._args.args[1]
-      cortx_conf_url = self._args.args[2] if num_args > 2 else None
-      CortxProvisioner.config_apply(solution_conf_url, cluster_conf_url,
-        cortx_conf_url)
+      cortx_conf_url = self._args.cortx_conf
+      CortxProvisioner.config_apply(solution_conf_url, cortx_conf_url)
 
 
 class ClusterCmd(Cmd):
